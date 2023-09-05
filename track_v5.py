@@ -38,7 +38,6 @@ from yolov5.models.common import DetectMultiBackend
 from yolov5.models.experimental import attempt_load
 
 from yolov5.utils.dataloaders import VID_FORMATS, LoadImages, LoadStreams
-# from dataloaders import VID_FORMATS, LoadImages, LoadStreams
 from yolov5.utils.general import (LOGGER, check_img_size, non_max_suppression, scale_coords, check_requirements, cv2,
                                   check_imshow, xyxy2xywh, increment_path, strip_optimizer, colorstr, print_args,
                                   check_file)
@@ -130,8 +129,6 @@ def detect(
         nr_sources = 1
     vid_path, vid_writer, txt_path = [None] * nr_sources, [None] * nr_sources, [None] * nr_sources
 
-    print(f'nr_sources: {nr_sources}')
-
     # initialize StrongSORT
     cfg = get_config()
     cfg.merge_from_file(opt.config_strongsort)
@@ -160,8 +157,8 @@ def detect(
     dt, seen = [0.0, 0.0, 0.0, 0.0], 0
     curr_frames, prev_frames = [None] * nr_sources, [None] * nr_sources
     prev_id, id = None, None
-    box_width, box_height = None, None
-    prev_box_width, prev_box_height = None, None
+    # box_width, box_height = None, None
+    # prev_box_width, prev_box_height = None, None
 
     for frame_idx, (path, im, im0s, vid_cap, s) in enumerate(dataset):
         t1 = time_sync()
@@ -246,11 +243,10 @@ def detect(
                     em_i = 0
                     box_list = []
                     for j, (output, conf) in enumerate(zip(outputs[i], confs)):
-                        if box_width or box_height is not None:
-                            # print('if box_width or box_height is not None')
-                            # prev_box_width, prev_box_height = box_width, box_height
-                            # print(True if box_width == prev_box_width else False)
-                            pass
+                        # if box_width or box_height is not None:
+                        #     print('if box_width or box_height is not None')
+                        #     prev_box_width, prev_box_height = box_width, box_height
+                        #     print(True if box_width == prev_box_width else False)
                         bboxes = output[0:4]
                         box_width, box_height = abs(bboxes[0] - bboxes[2]), abs(bboxes[1] - bboxes[3])
                         box_area = int(box_width * box_height)
@@ -260,7 +256,6 @@ def detect(
                             pass
                         else:
                             continue
-                        print(box_list, max(box_list))
 
                         id = output[4]
                         cls = output[5]
