@@ -7,6 +7,10 @@
 
 ## 초기 설정
 
-1. [yolov5-crowdhuman](https://github.com/deepakcrk/yolov5-crowdhuman) 저장소의 [모델](https://drive.google.com/file/d/1gglIwqxaH2iTvy6lZlXuAcMpd_U0GCUb/view)을 다운받아 **weights** 폴더에 넣는다.
+1. [yolov5-crowdhuman](https://github.com/deepakcrk/yolov5-crowdhuman) 저장소의 [모델](https://drive.google.com/file/d/1gglIwqxaH2iTvy6lZlXuAcMpd_U0GCUb/view)을 다운받아 **track_v5.py**와 같은 경로에 넣는다.
+
 2. [YOLOv5](https://github.com/ultralytics/yolov5) 저장소를 `clone` 하여 **yolov5** 폴더에 넣는다.
-3. 
+
+   - 만약 `scale_coords`, `clip_coords` 함수가 없다는 에러가 발생한다면 ...
+
+     
