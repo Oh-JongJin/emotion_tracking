@@ -17,7 +17,6 @@ from torch import no_grad, from_numpy
 import torch.backends.cudnn as cudnn
 
 import warnings
-
 warnings.filterwarnings('ignore')
 
 FILE = Path(__file__).resolve()
@@ -388,22 +387,7 @@ def detect(
                 except:
                     pass
 
-                # if save_txt:
-                #     # overlay
-                #     display = im0.copy()
-                #     h, w = im0.shape[0], im0.shape[1]
-                #     x1 = 10
-                #     y1 = 10
-                #     x2 = 10
-                #     y2 = 70
-                #
-                #     txt_size = cv2.getTextSize(str(itemDict), cv2.FONT_HERSHEY_SIMPLEX, 0.4, 1)[0]
-                #     cv2.rectangle(im0, (x1, y1 + 1), (txt_size[0] * 2, y2), (0, 0, 0), -1)
-                #     cv2.putText(im0, '{}'.format(itemDict), (x1 + 10, y1 + 35), cv2.FONT_HERSHEY_SIMPLEX, 0.7,
-                #                 (210, 210, 210), 2)
-                #     cv2.addWeighted(im0, 0.7, display, 1 - 0.7, 0, im0)
-
-            # current frame // tesing
+            # Saving last frame
             cv2.imwrite('testing.jpg', im0)
 
             if show_vid:
@@ -439,7 +423,7 @@ def detect(
                     vid_path[i] = save_path
                     if isinstance(vid_writer[i], cv2.VideoWriter):
                         vid_writer[i].release()  # release previous video writer
-                    if vid_cap:  # video
+                    if vid_cap:  # video (Only saving mp4 extension)
                         fps = vid_cap.get(cv2.CAP_PROP_FPS)
                         w = int(vid_cap.get(cv2.CAP_PROP_FRAME_WIDTH))
                         h = int(vid_cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
