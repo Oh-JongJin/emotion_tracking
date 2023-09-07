@@ -44,6 +44,7 @@ __pycache__/
 
 # Distribution / packaging
 .Python
+yolov5/
 env/
 build/
 develop-eggs/

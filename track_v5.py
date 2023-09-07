@@ -17,6 +17,7 @@ from torch import no_grad, from_numpy
 import torch.backends.cudnn as cudnn
 
 import warnings
+
 warnings.filterwarnings('ignore')
 
 FILE = Path(__file__).resolve()
@@ -86,7 +87,7 @@ def detect(
         draw=False,  # draw object trajectory lines
 ):
     source = str(source)
-    start_time = None
+    start_time, s_time, e_time = None, None, None
     em_count, happy, neutral, anger = 0, 0, 0, 0
     save_img = not nosave and not source.endswith('.txt')  # save inference images
     is_file = Path(source).suffix[1:] in (VID_FORMATS)
@@ -216,6 +217,7 @@ def detect(
 
                 if start_time is None:
                     start_time = time.strftime('%Y_%m_%d_%H_%M_%S', time.localtime(time.time()))
+                    s_time = time.strftime('%Y.%m.%d %H:%M:%S', time.localtime(time.time())),
 
                 # Print results
                 for c in det[:, -1].unique():
@@ -320,7 +322,9 @@ def detect(
                             epoch = time.time()
                             strtime = datetime.today()
                             data = [[str(epoch), strtime, happy_per, neutral_per, anger_per]]
-                            result = pd.DataFrame(data)
+                            # result = pd.DataFrame(data)
+                            e_time = time.strftime('%Y.%m.%d %H:%M:%S', time.localtime(time.time())),
+                            result = pd.DataFrame([[f'{s_time} ~ {e_time}', happy_per, neutral_per, anger_per]])
 
                             # print(f'{colorstr("bold", "prev_id")}: {prev_id}, '
                             #       f'{colorstr("bold", "id")}: {int(id)}, '
@@ -330,12 +334,14 @@ def detect(
                             #       f'{colorstr("red", j)}')
                             # print(colorstr('bold', 'red', 'hi~'))
 
-                            if save_csv:    # Save csv file
-                                if Path(output_path).exists() and prev_id == id:
-                                    result.to_csv(output_path, mode='a', index=False, header=False)
-                                elif not Path(output_path).exists() and prev_id != id:
-                                    result.to_csv(output_path, mode='w', index=False,
-                                                  header=['epoch', 'time', 'happy', 'neutral', 'anger'])
+                            if save_csv:  # Save csv file
+                                # if Path(output_path).exists() and prev_id == id:
+                                #     result.to_csv(output_path, mode='a', index=False, header=False)
+                                # elif not Path(output_path).exists() and prev_id != id:
+                                #     result.to_csv(output_path, mode='w', index=False,
+                                #                   header=['epoch', 'time', 'happy', 'neutral', 'anger'])
+                                result.to_csv(output_path, mode='w', index=False,
+                                              header=['epoch', 'happy', 'neutral', 'anger'])
 
                             c = int(cls)  # integer class
                             id = int(id)  # integer id

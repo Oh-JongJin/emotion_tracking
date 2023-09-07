@@ -7,10 +7,62 @@
 
 ## 초기 설정
 
-1. [yolov5-crowdhuman](https://github.com/deepakcrk/yolov5-crowdhuman) 저장소의 [모델](https://drive.google.com/file/d/1gglIwqxaH2iTvy6lZlXuAcMpd_U0GCUb/view)을 다운받아 **track_v5.py**와 같은 경로에 넣는다.
 
+
+1. [yolov5-crowdhuman](https://github.com/deepakcrk/yolov5-crowdhuman) 저장소의 [모델](https://drive.google.com/file/d/1gglIwqxaH2iTvy6lZlXuAcMpd_U0GCUb/view)을 다운받아 **track_v5.py**와 같은 경로에 넣는다.
 2. [YOLOv5](https://github.com/ultralytics/yolov5) 저장소를 `clone` 하여 **yolov5** 폴더에 넣는다.
 
-   - 만약 `scale_coords`, `clip_coords` 함수가 없다는 에러가 발생한다면 ...
 
-     
+
+
+
+
+
+
+
+
+
+<details>
+    <summary>만약 ImportError가 발생한다면</summary>
+`scale_coords`, `clip_coords` 함수를 **yolov5/utils/general.py**에 추가한다.
+
+**scale_coords**
+
+
+```python
+def scale_coords(img1_shape, coords, img0_shape, ratio_pad=None):
+    # Rescale coords (xyxy) from img1_shape to img0_shape
+    if ratio_pad is None:  # calculate from img0_shape
+        gain = min(img1_shape[0] / img0_shape[0], img1_shape[1] / img0_shape[1])  # gain  = old / new
+        pad = (img1_shape[1] - img0_shape[1] * gain) / 2, (img1_shape[0] - img0_shape[0] * gain) / 2  # wh padding
+    else:
+        gain = ratio_pad[0][0]
+        pad = ratio_pad[1]
+
+    coords[:, [0, 2]] -= pad[0]  # x padding
+    coords[:, [1, 3]] -= pad[1]  # y padding
+    coords[:, :4] /= gain
+    clip_coords(coords, img0_shape)
+    return coords
+```
+
+**clip_coords**
+
+```python
+def clip_coords(boxes, img_shape):
+    # Clip bounding xyxy bounding boxes to image shape (height, width)
+    boxes[:, 0].clamp_(0, img_shape[1])  # x1
+    boxes[:, 1].clamp_(0, img_shape[0])  # y1
+    boxes[:, 2].clamp_(0, img_shape[1])  # x2
+    boxes[:, 3].clamp_(0, img_shape[0])  # y2
+```
+
+</details>
+
+
+
+만약 `ImportError: cannot import name 'scale_coords' from 'yolov.utils.general'` 에러가 발생한다면 
+
+
+
+**yolov5/utils/general.py**에 아래 함수를 
