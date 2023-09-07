@@ -20,8 +20,6 @@
 
 
 
-
-
 <details>
     <summary>만약 ImportError가 발생한다면</summary>
 `scale_coords`, `clip_coords` 함수를 **yolov5/utils/general.py**에 추가한다.
@@ -58,11 +56,3 @@ def clip_coords(boxes, img_shape):
 ```
 
 </details>
-
-
-
-만약 `ImportError: cannot import name 'scale_coords' from 'yolov.utils.general'` 에러가 발생한다면 
-
-
-
-**yolov5/utils/general.py**에 아래 함수를 
