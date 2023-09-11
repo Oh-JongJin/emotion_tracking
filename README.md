@@ -5,14 +5,22 @@
 
 
 
-## 초기 설정
+## 초기 설정 및 설치
 
-
+Python Version: **3.8.0**
+CUDA Version: **11.1**
+cuDNN Version: **8.7.0**
 
 1. [yolov5-crowdhuman](https://github.com/deepakcrk/yolov5-crowdhuman) 저장소의 [모델](https://drive.google.com/file/d/1gglIwqxaH2iTvy6lZlXuAcMpd_U0GCUb/view)을 다운받아 **track_v5.py**와 같은 경로에 넣는다.
 2. [YOLOv5](https://github.com/ultralytics/yolov5) 저장소를 `clone` 하여 **yolov5** 폴더에 넣는다.
 
+사용 라이브러리 설치: `pip install -r requirements.txt`
 
+
+
+## 감정 인식
+
+8개 범주의 감정 인식이 가능하며, 그 중에 3개의 감정(행복, 분노, 보통)을 화면에 표출한다.
 
 
 
@@ -22,8 +30,7 @@
 
 <details>
     <summary>만약 ImportError가 발생한다면</summary>
-`scale_coords`, `clip_coords` 함수를 **yolov5/utils/general.py**에 추가한다.
-
+scale_coords, clip_coords 함수를 yolov5/utils/general.py에 추가한다.
 **scale_coords**
 
 
