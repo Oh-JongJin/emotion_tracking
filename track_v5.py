@@ -88,8 +88,8 @@ def detect(
 ):
     source = str(source)
     start_time, s_time, e_time = None, None, None
-    em_count, happy, neutral, anger = 0, 0, 0, 0
-    save_img = not nosave and not source.endswith('.txt')  # save inference images
+    em_count, happy, neutral, anger, contempt, disgust, fear, sad, surprise = 0, 0, 0, 0, 0, 0, 0, 0, 0
+    # save_img = not nosave and not source.endswith('.txt')  # save inference images
     is_file = Path(source).suffix[1:] in (VID_FORMATS)
     is_url = source.lower().startswith(('rtsp://', 'rtmp://', 'http://', 'https://'))
     webcam = source.isnumeric() or source.endswith('.txt') or (is_url and not is_file)
@@ -217,7 +217,8 @@ def detect(
 
                 if start_time is None:
                     start_time = time.strftime('%Y_%m_%d_%H_%M_%S', time.localtime(time.time()))
-                    s_time = time.strftime('%Y.%m.%d %H:%M:%S', time.localtime(time.time())),
+                    # s_time = time.strftime('%Y.%m.%d %H:%M:%S', time.localtime(time.time()))
+                    s_time = time.time()
 
                 # Print results
                 for c in det[:, -1].unique():
@@ -291,12 +292,14 @@ def detect(
 
                         if save_vid or save_crop or show_vid:  # Add bbox to image
                             if prev_id != id:
-                                em_count, happy, neutral, anger = 0, 0, 0, 0
+                                em_count, happy, neutral, anger, contempt, disgust, fear, sad, surprise = \
+                                    0, 0, 0, 0, 0, 0, 0, 0, 0
 
                             em_label = emotions[em_i][0]
                             emotion, em_conf_thresh = emotions[i][0].split(' ')[0], emotions[i][0].split(' ')[1]
 
-                            if emotion == 'happy' or emotion == 'neutral' or emotion == 'anger':
+                            # if emotion == 'happy' or emotion == 'neutral' or emotion == 'anger':
+                            if emotion is not None:
                                 em_count += 1
                             if emotion == 'happy':
                                 happy += 1
@@ -304,13 +307,30 @@ def detect(
                                 neutral += 1
                             elif emotion == 'anger':
                                 anger += 1
+                            elif emotion == 'contempt':
+                                contempt += 1
+                            elif emotion == 'disgust':
+                                disgust += 1
+                            elif emotion == 'fear':
+                                fear += 1
+                            elif emotion == 'sad':
+                                sad += 1
+                            elif emotion == 'surprise':
+                                surprise += 1
 
                             if em_count != 0:
                                 happy_per = round(happy / em_count * 100, 1)
                                 neutral_per = round(neutral / em_count * 100, 1)
                                 anger_per = round(anger / em_count * 100, 1)
+                                contempt_per = round(contempt / em_count * 100, 1)
+                                disgust_per = round(disgust / em_count * 100, 1)
+                                fear_per = round(fear / em_count * 100, 1)
+                                sad_per = round(sad / em_count * 100, 1)
+                                surprise_per = round(surprise / em_count * 100, 1)
+
                             else:
-                                happy_per, neutral_per, anger_per = 0, 0, 0
+                                happy_per, neutral_per, anger_per, contempt_per, disgust_per, \
+                                    fear_per, sad_per, surprise_per = 0, 0, 0, 0, 0, 0, 0, 0
                             em_i += 1
                             md = time.strftime('%Y%m%d', time.localtime(time.time()))
                             output_path = f'runs/csv/{md}/{start_time}_id({int(id)}).csv'
@@ -319,29 +339,24 @@ def detect(
                             # output_path = f'runs/csv/{md}/{int(id)}.csv'
                             # output_path = f'runs/csv/{md}/{int(id)}.parquet'
                             # epoch = datetime.now().isoformat(sep=' ', timespec='milliseconds')
-                            epoch = time.time()
-                            strtime = datetime.today()
-                            data = [[str(epoch), strtime, happy_per, neutral_per, anger_per]]
+                            # epoch = time.time()
+                            # strtime = datetime.today()
+                            # data = [[str(epoch), strtime, happy_per, neutral_per, anger_per]]
                             # result = pd.DataFrame(data)
-                            e_time = time.strftime('%Y.%m.%d %H:%M:%S', time.localtime(time.time())),
-                            result = pd.DataFrame([[f'{s_time} ~ {e_time}', happy_per, neutral_per, anger_per]])
 
-                            # print(f'{colorstr("bold", "prev_id")}: {prev_id}, '
-                            #       f'{colorstr("bold", "id")}: {int(id)}, '
-                            #       f'{colorstr("bold", "prev_id == id")}: {prev_id == id} '
-                            #       f'[{colorstr(epoch)}] '
-                            #       f'count: {colorstr("bold", "bright_yellow", em_count)} '
-                            #       f'{colorstr("red", j)}')
-                            # print(colorstr('bold', 'red', 'hi~'))
+                            # e_time = time.strftime('%Y.%m.%d %H:%M:%S', time.localtime(time.time())),
+                            e_time = time.time()
+                            o_time = float(e_time) - float(s_time)
+
+                            s_time_str = time.strftime('%Y.%m.%d %H:%M:%S', time.localtime(s_time))
+                            e_time_str = time.strftime('%Y.%m.%d %H:%M:%S', time.localtime(e_time))
+                            result = pd.DataFrame([[s_time_str, e_time_str, o_time, happy_per, neutral_per, anger_per,
+                                                    contempt_per, disgust_per, fear_per, sad_per, surprise_per]])
 
                             if save_csv:  # Save csv file
-                                # if Path(output_path).exists() and prev_id == id:
-                                #     result.to_csv(output_path, mode='a', index=False, header=False)
-                                # elif not Path(output_path).exists() and prev_id != id:
-                                #     result.to_csv(output_path, mode='w', index=False,
-                                #                   header=['epoch', 'time', 'happy', 'neutral', 'anger'])
                                 result.to_csv(output_path, mode='w', index=False,
-                                              header=['epoch', 'happy', 'neutral', 'anger'])
+                                              header=['start time', 'end time', 'operation time', 'happy', 'neutral',
+                                                      'anger', 'contempt', 'disgust', 'fear', 'sad', 'surprise'])
 
                             c = int(cls)  # integer class
                             id = int(id)  # integer id
@@ -397,17 +412,23 @@ def detect(
             cv2.imwrite('testing.jpg', im0)
 
             if show_vid:
-                sub_img = im0[0:int(im0.shape[0] * 2 / 7), 0:int(im0.shape[1] / 3)]
+                sub_img = im0[0:int(im0.shape[0] * 2 / 3.5), 0:int(im0.shape[1] / 3)]
                 white_rect = np.ones(sub_img.shape, dtype=np.uint8) * 200
                 res = cv2.addWeighted(sub_img, 0.5, white_rect, 0.5, 1.0)
-                im0[0:int(im0.shape[0] * 2 / 7), 0:int(im0.shape[1] / 3)] = res
+                im0[0:int(im0.shape[0] * 2 / 3.5), 0:int(im0.shape[1] / 3)] = res
 
                 if em_count != 0:
                     happy_per = round(happy / em_count * 100, 1)
                     neutral_per = round(neutral / em_count * 100, 1)
                     anger_per = round(anger / em_count * 100, 1)
+                    contempt_per = round(contempt / em_count * 100, 1)
+                    disgust_per = round(disgust / em_count * 100, 1)
+                    fear_per = round(fear / em_count * 100, 1)
+                    sad_per = round(sad / em_count * 100, 1)
+                    surprise_per = round(surprise / em_count * 100, 1)
                 else:
-                    happy_per, neutral_per, anger_per = 0, 0, 0
+                    happy_per, neutral_per, anger_per, contempt_per, disgust_per, \
+                        fear_per, sad_per, surprise_per = 0, 0, 0, 0, 0, 0, 0, 0
 
                 cv2.putText(im0, f'happy: {happy_per}%', (int(im0.shape[1] / 12), int(im0.shape[0] / 9)),
                             cv2.FONT_ITALIC, 0.5, (0, 0, 0), 1)
@@ -415,6 +436,17 @@ def detect(
                             cv2.FONT_ITALIC, 0.5, (0, 0, 0), 1)
                 cv2.putText(im0, f'anger: {anger_per}%', (int(im0.shape[1] / 12), int(im0.shape[0] * 2 / 9)),
                             cv2.FONT_ITALIC, 0.5, (0, 0, 0), 1)
+                cv2.putText(im0, f'contempt: {contempt_per}%', (int(im0.shape[1] / 12), int(im0.shape[0] * 2.5 / 9)),
+                            cv2.FONT_ITALIC, 0.5, (0, 0, 0), 1)
+                cv2.putText(im0, f'disgust: {disgust_per}%', (int(im0.shape[1] / 12), int(im0.shape[0] * 3 / 9)),
+                            cv2.FONT_ITALIC, 0.5, (0, 0, 0), 1)
+                cv2.putText(im0, f'fear: {fear_per}%', (int(im0.shape[1] / 12), int(im0.shape[0] * 3.5 / 9)),
+                            cv2.FONT_ITALIC, 0.5, (0, 0, 0), 1)
+                cv2.putText(im0, f'sad: {sad_per}%', (int(im0.shape[1] / 12), int(im0.shape[0] * 4 / 9)),
+                            cv2.FONT_ITALIC, 0.5, (0, 0, 0), 1)
+                cv2.putText(im0, f'surprise: {surprise_per}%', (int(im0.shape[1] / 12), int(im0.shape[0] * 4.5 / 9)),
+                            cv2.FONT_ITALIC, 0.5, (0, 0, 0), 1)
+
                 current_time = time.strftime('%Y.%m.%d %H:%M:%S', time.localtime(time.time()))
                 cv2.putText(im0, f'{current_time}', (int(im0.shape[1] / 2.5), int(im0.shape[0] / 15)),
                             cv2.FONT_ITALIC, 1, (0, 0, 0), 2)
