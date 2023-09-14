@@ -346,7 +346,7 @@ def detect(
 
                             # e_time = time.strftime('%Y.%m.%d %H:%M:%S', time.localtime(time.time())),
                             e_time = time.time()
-                            o_time = float(e_time) - float(s_time)
+                            o_time = round(float(e_time) - float(s_time), 2)
 
                             s_time_str = time.strftime('%Y.%m.%d %H:%M:%S', time.localtime(s_time))
                             e_time_str = time.strftime('%Y.%m.%d %H:%M:%S', time.localtime(e_time))
@@ -375,13 +375,12 @@ def detect(
 
             else:
                 start_time = None
-                # em_count, happy, neutral, anger = 0, 0, 0, 0
 
                 strongsort_list[i].increment_ages()
                 LOGGER.info('No detections')
 
             if count:
-                itemDict = {}
+                # itemDict = {}
                 # NOTE: this works only if save-txt is true
                 try:
                     df = pd.read_csv(txt_path + '.txt', header=None, delim_whitespace=True)
@@ -401,8 +400,8 @@ def detect(
                     vc2 = {}
                     for key, val in enumerate(names):
                         vc2[key] = val
-                    itemDict = dict((vc2[key], value) for (key, value) in vc.items())
-                    itemDict = dict(sorted(itemDict.items(), key=lambda item: item[0]))
+                    # itemDict = dict((vc2[key], value) for (key, value) in vc.items())
+                    # itemDict = dict(sorted(itemDict.items(), key=lambda item: item[0]))
                     # print(itemDict)
 
                 except:
