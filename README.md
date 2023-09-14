@@ -29,7 +29,7 @@ cuDNN Version: **8.7.0**
                    [--iou-thres IOU_THRES] [--max-det MAX_DET]
                    [--device DEVICE] [--show-vid] [--save-txt] [--save-conf]
                    [--save-crop] [--save-vid] [--nosave] [--count] [--draw]
-                   [--classes CLASSES [CLASSES ...]] [--agnostic-nms]
+                   [--c  lasses CLASSES [CLASSES ...]] [--agnostic-nms]
                    [--augment] [--visualize] [--update] [--project PROJECT]
                    [--save-csv] [--name NAME] [--exist-ok]
                    [--line-thickness LINE_THICKNESS] [--hide-labels]
@@ -79,6 +79,14 @@ optional arguments:
 
 
 
+ex)
+
+```bash
+> python track_5v.py --yolo-weights [YOLO PT FILE] --save-csv
+```
+
+
+
 
 
 
@@ -105,9 +113,10 @@ optional arguments:
 
 <details>
     <summary>만약 ImportError가 발생한다면</summary>
-scale_coords, clip_coords 함수를 yolov5/utils/general.py에 추가한다.
-**scale_coords**
 
+scale_coords, clip_coords 함수를 yolov5/utils/general.py에 추가한다.
+
+**scale_coords**
 
 ```python
 def scale_coords(img1_shape, coords, img0_shape, ratio_pad=None):
