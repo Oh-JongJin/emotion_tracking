@@ -82,7 +82,7 @@ optional arguments:
 ex)
 
 ```bash
-> python track_5v.py --yolo-weights [YOLO PT FILE] --save-csv
+> python track_5v.py --yolo-weights [YOLO PT FILE]
 ```
 
 
@@ -148,3 +148,12 @@ def clip_coords(boxes, img_shape):
 
 </details>
 
+
+
+
+
+## 저장 데이터 형식
+
+![image-20230914172619013](C:\Users\jjoh4\AppData\Roaming\Typora\typora-user-images\image-20230914172619013.png)
+
+`--save-csv` 

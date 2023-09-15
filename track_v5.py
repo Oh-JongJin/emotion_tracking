@@ -249,7 +249,7 @@ def detect(
                         #     print('if box_width or box_height is not None')
                         #     prev_box_width, prev_box_height = box_width, box_height
                         #     print(True if box_width == prev_box_width else False)
-                        bboxes = output[0:4]
+                        bboxes = output[0:4]    # box coordinate
                         box_width, box_height = abs(bboxes[0] - bboxes[2]), abs(bboxes[1] - bboxes[3])
                         box_area = int(box_width * box_height)
                         box_list.append(box_area)
@@ -258,6 +258,7 @@ def detect(
                             pass
                         else:
                             continue
+                        print(box_list)
 
                         id = output[4]
                         cls = output[5]
@@ -371,7 +372,7 @@ def detect(
                                 save_one_box(bboxes, imc, file=save_dir / 'crops' / txt_file_name / names[
                                     c] / f'{id}' / f'{p.stem}.jpg', BGR=True)
 
-                LOGGER.info(f'{s}Done. YOLO:({t3 - t2:.3f}s), StrongSORT:({t5 - t4:.3f}s)')
+                # LOGGER.info(f'{s}Done. YOLO:({t3 - t2:.3f}s), StrongSORT:({t5 - t4:.3f}s)')
 
             else:
                 start_time = None
