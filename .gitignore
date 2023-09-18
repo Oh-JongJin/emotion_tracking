@@ -49,6 +49,7 @@ env/
 build/
 develop-eggs/
 dist/
+track_v5.exe
 downloads/
 eggs/
 .eggs/
