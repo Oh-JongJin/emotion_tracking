@@ -154,6 +154,6 @@ def clip_coords(boxes, img_shape):
 
 ## 저장 데이터 형식
 
-![image-20230914172619013](C:\Users\jjoh4\AppData\Roaming\Typora\typora-user-images\image-20230914172619013.png)
+![1](1.png)
 
 `--save-csv` 
