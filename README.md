@@ -7,13 +7,16 @@
 
 ## 초기 설정 및 설치
 
-Python Version: **3.8.0**
+Python Version: **3.8.11**
+
 CUDA Version: **11.1**
+
 cuDNN Version: **8.7.0**
 
 1. [yolov5-crowdhuman](https://github.com/deepakcrk/yolov5-crowdhuman) 저장소의 [모델](https://drive.google.com/file/d/1gglIwqxaH2iTvy6lZlXuAcMpd_U0GCUb/view)을 다운로드.
 2. [YOLOv5](https://github.com/ultralytics/yolov5) 저장소를 **yolov5** 폴더에 `clone`하기.
 3. 사용 라이브러리 설치: `pip install -r requirements.txt`
+4. PyTorch 설치: `pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 -f https://download.pytorch.org/whl/torch_stable.html`
 
 
 
@@ -79,10 +82,8 @@ optional arguments:
 
 
 
-ex)
-
 ```bash
-> python track_5v.py --yolo-weights [YOLO PT FILE]
+> python track_5v.py --yolo-weights [YOLO PT FILE] --source [RTSP]
 ```
 
 
@@ -116,7 +117,7 @@ ex)
 
 scale_coords, clip_coords 함수를 yolov5/utils/general.py에 추가한다.
 
-**scale_coords**
+- **scale_coords**
 
 ```python
 def scale_coords(img1_shape, coords, img0_shape, ratio_pad=None):
@@ -135,7 +136,7 @@ def scale_coords(img1_shape, coords, img0_shape, ratio_pad=None):
     return coords
 ```
 
-**clip_coords**
+- **clip_coords**
 
 ```python
 def clip_coords(boxes, img_shape):
@@ -156,4 +157,9 @@ def clip_coords(boxes, img_shape):
 
 ![1](1.png)
 
-`--save-csv` 
+`--save-csv` 사용 시 감정 인식 데이터 저장을 시작함.
+
+start time: 인식이 시작되는 시간
+end time: 인식이 끝난 시간
+operation time: 감정 인식 동작 시간
+8가지 감정 분류: 감정 분포 비율
