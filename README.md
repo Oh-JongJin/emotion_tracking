@@ -159,7 +159,7 @@ def clip_coords(boxes, img_shape):
 
 `--save-csv` 사용 시 감정 인식 데이터 저장을 시작함.
 
-start time: 인식이 시작되는 시간
-end time: 인식이 끝난 시간
-operation time: 감정 인식 동작 시간
-8가지 감정 분류: 감정 분포 비율
+- start time: 인식이 시작되는 시간
+- end time: 인식이 끝난 시간
+- operation time: 감정 인식 동작 시간
+- 8가지 감정 분류: 감정 분포 비율
