@@ -258,7 +258,7 @@ def detect(
                             pass
                         else:
                             continue
-                        print(box_list)
+                        # print(box_list)
 
                         id = output[4]
                         cls = output[5]
@@ -493,7 +493,7 @@ def parse_opt():
     parser.add_argument('--strong-sort-weights', type=str, default=WEIGHTS / 'osnet_x0_25_msmt17.pt')
     parser.add_argument('--config-strongsort', type=str, default='strong_sort/configs/strong_sort.yaml')
     # parser.add_argument('--source', type=str, default='0', help='file/dir/URL/glob, 0 for webcam')
-    parser.add_argument('--source', type=str, default='rtsp://admin:sijung5520@192.168.100.133/profile4/media.smp', help='file/dir/URL/glob, 0 for webcam')
+    parser.add_argument('--source', type=str, default=0, help='file/dir/URL/glob, 0 for webcam')
     parser.add_argument('--imgsz', '--img', '--img-size', nargs='+', type=int, default=[640], help='inference size h,w')
     parser.add_argument('--conf-thres', type=float, default=0.5, help='confidence threshold')
     parser.add_argument('--iou-thres', type=float, default=0.5, help='NMS IoU threshold')
@@ -530,7 +530,7 @@ def parse_opt():
 
 
 def main(opt):
-    check_requirements(requirements=ROOT / 'requirements.txt', exclude=('tensorboard', 'thop'))
+    # check_requirements(requirements=ROOT / 'requirements.txt', exclude=('tensorboard', 'thop'))
     detect(**vars(opt))
 
 
