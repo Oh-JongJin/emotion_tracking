@@ -110,6 +110,7 @@ optional arguments:
 - sad: 슬픔
 - surprise: 놀람
 
+![image](https://github.com/user-attachments/assets/f2ab7b86-f248-4f40-adcf-d3a3846e0713)
 
 
 
