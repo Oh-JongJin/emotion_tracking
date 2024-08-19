@@ -3,30 +3,41 @@
 ### [Kor](README.md) | [Eng](README_eng.md)
 
 
+실시간 영상에서 사람의 감정을 인식하고 추적하는 시스템을 구현.
 
-이 저장소는 [YOLOv5](https://github.com/ultralytics/yolov5)와 [RepVGG](https://github.com/DingXiaoH/RepVGG)를 기반으로 하여 작성한 [감정 인식](https://github.com/George-Ogden/emotion)과 [Tracking](https://github.com/mikel-brostrom/yolo_tracking)을 연동하여 감정 인식할 사람을 추적함과 동시에 현재 감정을 표출하는 소스 코드이다.
-기존에 작성했던 프로그램에서 감정 인식 중 **사람 인식이 끊길 경우** 현재까지 저장되던 감정 비율이 **초기화**되는 문제를 해결하기 위해 **Tracking**을 적용하였다.
+YOLOv5와 RepVGG를 기반으로 한 감정 인식 모델과 Tracking 기능을 결합하여 다음과 같은 기능을 제공:
+- 실시간 영상에서 사람 감지
+- 감지된 사람의 감정 인식
+- 인식된 사람의 지속적인 추적
+- 추적 중인 사람의 감정 변화 모니터링
+
+이 시스템은 기존의 감정 인식 프로그램에서 발생하던 문제점인 **사람 인식이 끊길 경우** 감정 비율이 **초기화**되는 현상을 Tracking 기능 적용.
+
+
+## 실행 환경
+
+- Python: **3.8.11**
+
+- CUDA: **11.1**
+
+- cuDNN: **8.7.0**
+
+- PyTorch: **1.9.0**
 
 
 
-## 초기 설정 및 설치
 
-Python Version: **3.8.11**
-
-CUDA Version: **11.1**
-
-cuDNN Version: **8.7.0**
-
-1. [yolov5-crowdhuman](https://github.com/deepakcrk/yolov5-crowdhuman) 저장소의 [모델](https://drive.google.com/file/d/1gglIwqxaH2iTvy6lZlXuAcMpd_U0GCUb/view)을 다운로드.
-2. [YOLOv5](https://github.com/ultralytics/yolov5) 저장소를 **yolov5** 폴더에 `clone`하기.
-3. 사용 라이브러리 설치: `pip install -r requirements.txt`
-4. PyTorch 설치: `pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 -f https://download.pytorch.org/whl/torch_stable.html`
 
 
 
 
 
 ## 실행 방법
+
+1. yolov5-crowdhuman [모델](https://drive.google.com/file/d/1gglIwqxaH2iTvy6lZlXuAcMpd_U0GCUb/view) 다운로드.
+2. [YOLOv5](https://github.com/ultralytics/yolov5) 저장소를 **yolov5** 폴더에 `clone`.
+3. 사용 라이브러리 설치: `pip install -r requirements.txt`
+
 
 ```bash
 > usage: track_v5.py [-h] [--yolo-weights YOLO_WEIGHTS [YOLO_WEIGHTS ...]]
@@ -98,9 +109,9 @@ optional arguments:
 
 ## 감정 인식
 
-8개 범주의 감정 인식이 가능하며 인식된 감정 비율을 화면에 표출한다.
-인식 가능한 얼굴 표정:
+8개 범주의 감정 인식이 가능하며 인식된 감정 비율을 화면에 표출.
 
+인식 가능한 얼굴 표정:
 - anger: 분노
 - contempt: 경멸
 - disgust: 혐오
@@ -163,6 +174,7 @@ def clip_coords(boxes, img_shape):
 ![1](1.png)
 
 `--save-csv` 사용 시 감정 인식 데이터 저장을 시작함.
+
 
 - start time: 인식이 시작되는 시간
 - end time: 인식이 끝난 시간
